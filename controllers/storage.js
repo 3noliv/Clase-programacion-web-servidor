@@ -1,4 +1,4 @@
-const StorageModel = require('../models/storage.js')
+const StorageModel = require('../models/nosql/storage.js')
 const {uploadToPinata} = require('../utils/handleUploadIPFS.js')
 const uploadImage = async (req, res) => {
     try {

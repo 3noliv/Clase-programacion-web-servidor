@@ -1,4 +1,4 @@
-const UserModel = require('../models/users.js')
+const UserModel = require('../models/nosql/users.js')
 
 const getItems = async (req, res) => {
     console.log(req);
