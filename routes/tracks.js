@@ -1,4 +1,13 @@
+// routes/tracks.js
 const express = require("express");
+const router = express.Router();
+const authMiddleware = require("../middleware/session");
+const checkRol = require("../middleware/rol");
+const customHeader = require("../middleware/customHeader");
+const {
+  validatorCreateItem,
+  validatorGetItem,
+} = require("../validators/tracks");
 const {
   getItems,
   getItem,
@@ -6,18 +15,18 @@ const {
   updateItem,
   deleteItem,
 } = require("../controllers/tracks");
-const {
+
+router.get("/", authMiddleware, getItems);
+router.get("/:id", authMiddleware, validatorGetItem, getItem);
+router.post(
+  "/",
+  authMiddleware,
+  checkRol(["admin"]),
+  customHeader,
   validatorCreateItem,
-  validatorGetItem,
-  validatorUpdateItem,
-} = require("../validators/tracks");
-
-const router = express.Router();
-
-router.get("/", getItems);
-router.get("/:id", validatorGetItem, getItem);
-router.post("/", validatorCreateItem, createItem);
-router.put("/:id", validatorUpdateItem, updateItem);
-router.delete("/:id", validatorGetItem, deleteItem);
+  createItem
+);
+router.put("/:id", authMiddleware, validatorCreateItem, updateItem);
+router.delete("/:id", authMiddleware, validatorGetItem, deleteItem);
 
 module.exports = router;

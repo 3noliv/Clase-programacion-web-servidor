@@ -1,15 +1,10 @@
-const express = require('express')
-const {getItem, getItems, updateItem, createItem, deleteItem} = require ('../controllers/users.js')
+// routes/users.js
+const express = require("express");
+const router = express.Router();
+const authMiddleware = require("../middleware/session");
+const checkRol = require("../middleware/rol");
+const { getItems } = require("../controllers/users");
 
-const userRouter = express.Router();
+router.get("/", authMiddleware, checkRol(["admin"]), getItems);
 
-userRouter.get('/', getItems);
-userRouter.get('/:email', getItem);
-userRouter.post('/', createItem);
-userRouter.put('/:email', (req, res) => {
-    console.log(req.params);
-    updateItem(req, res);
-});
-userRouter.delete('/:email', deleteItem);
-
-module.exports = userRouter;
+module.exports = router;

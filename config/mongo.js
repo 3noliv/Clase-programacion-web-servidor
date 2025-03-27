@@ -1,15 +1,13 @@
-const mongoose = require('mongoose')
+// config/mongo.js
+const mongoose = require("mongoose");
 
 const dbConnect = () => {
-    const db_uri = process.env.DB_URI
-    mongoose.set('strictQuery', false)
-    mongoose.connect(db_uri)
-}
+  const DB_URI = process.env.DB_URI;
+  mongoose.set("strictQuery", false);
+  mongoose.connect(DB_URI, {}, (err, res) => {
+    if (!err) console.log("Conexión correcta a MongoDB ✅");
+    else console.error("Error de conexión ❌", err);
+  });
+};
 
-mongoose.connection.on('connected', () => console.log("Conectado a la BD"))
-
-mongoose.connection.on('error', (e) => console.log (e.message))
-
-module.exports = dbConnect
-
-
+module.exports = dbConnect;

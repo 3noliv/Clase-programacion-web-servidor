@@ -1,5 +1,7 @@
-const handleHttpError = (res, message, code = 403) => {
-  res.status(code).send(message);
+// utils/handleError.js
+const handleHttpError = (res, message = "Algo salió mal", code = 403) => {
+  res.status(code);
+  res.send({ error: message });
 };
 
 module.exports = { handleHttpError };

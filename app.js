@@ -1,21 +1,37 @@
-const express = require('express')
-const cors = require('cors')
-require ('dotenv').config()
+// app.js
+const express = require("express");
+const cors = require("cors");
+const morganBody = require("morgan-body");
+require("dotenvconfig");
 
-const routers = require('./routes')
+const loggerStream = require("./utils/handleLogger");
+const dbConnect = require("./config/mongo");
+const { dbConnectMySql, sequelize } = require("./config/mysql");
 
-const dbConnect = require('./config/mongo.js')
+const app = express();
 
-const app=express()
-app.use(cors())
-app.use(express.json())
+// Middleware principal
+app.use(cors());
+app.use(express.json());
 
-app.use('/api', routers)
+// Logger para errores 4XX y 5XX
+morganBody(app, {
+  noColors: true,
+  skip: (req, res) => res.statusCode < 400,
+  stream: loggerStream,
+});
 
-const port = process.env.PORT || 3000
+// Rutas
+app.use("/api", require("./routes"));
 
-app.listen(port, () => {
-    console.log(`Escuchando en el puerto ${port}`)
-})
+// Arranque
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("Servidor en puerto", PORT));
 
-dbConnect()
+// Base de datos dinámica
+if (process.env.ENGINE_DB === "nosql") {
+  dbConnect();
+} else {
+  dbConnectMySql();
+  sequelize.sync();
+}

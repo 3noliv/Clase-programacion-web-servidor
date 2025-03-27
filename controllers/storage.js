@@ -1,23 +1,9 @@
-const StorageModel = require('../models/nosql/storage.js')
-const {uploadToPinata} = require('../utils/handleUploadIPFS.js')
-const uploadImage = async (req, res) => {
-    try {
-        const fileBuffer = req.file.buffer
-        const filename = req.file.originalname
-        console.log(req.file);
-        const pinataResponse = await uploadToPinata(fileBuffer, filename)
-        const ipfsFile = pinataResponse.IpfsHash
-        const ipfs = `https://${process.env.PINATA_GATEWAY_URL}/ipfs/${ipfsFile}`
-        console.log("IPFS:", ipfs);
-        
-        const data = await StorageModel.create({filename, url: ipfs});
-        //const dataRes = { ...data._doc, uri: ipfs}
-        res.json(data)
-    }catch(err) {
-        console.log(err)
-        res.status(500).send("ERROR_UPLOAD_COMPANY_IMAGE");
-    }
- }
+// controllers/storage.js
+const { storageModel } = require("../models");
 
- module.exports = {uploadImage}
- 
+const getItems = async (req, res) => {
+  const data = await storageModel.find({});
+  res.send({ data });
+};
+
+module.exports = { getItems };
