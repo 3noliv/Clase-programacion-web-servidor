@@ -1,9 +1,9 @@
 // app.js
 const express = require("express");
 const cors = require("cors");
-const morganBody = require("morgan-body");
-require("dotenvconfig");
+require("dotenv").config;
 
+const morganBody = require("morgan-body");
 const loggerStream = require("./utils/handleLogger");
 const dbConnect = require("./config/mongo");
 const { dbConnectMySql, sequelize } = require("./config/mysql");
@@ -20,6 +20,9 @@ morganBody(app, {
   skip: (req, res) => res.statusCode < 400,
   stream: loggerStream,
 });
+
+const swaggerDocs = require("./docs/swagger");
+swaggerDocs(app);
 
 // Rutas
 app.use("/api", require("./routes"));

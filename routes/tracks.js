@@ -16,6 +16,17 @@ const {
   deleteItem,
 } = require("../controllers/tracks");
 
+/**
+ * @openapi
+ * /tracks:
+ *   get:
+ *     tags:
+ *       - tracks
+ *     summary: Obtener todas las canciones
+ *     responses:
+ *       200:
+ *         description: Lista de canciones
+ */
 router.get("/", authMiddleware, getItems);
 router.get("/:id", authMiddleware, validatorGetItem, getItem);
 router.post(
